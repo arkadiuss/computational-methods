@@ -15,7 +15,7 @@ def import_from_file(file):
     G.add_nodes_from(list(map(lambda x: int(x[0]), records)))
     for i, record in enumerate(records):
         print(record, i)
-        G.add_edge(int(record[0]), int(record[1]),  R=abs(int(record[2])), no=i+1, sem=0)
+        G.add_edge(int(record[0]), int(record[1]), R=abs(int(record[2])), no=i + 1, sem=0)
         # G.add_edge(int(record[1]), int(record[0]),  R=abs(int(record[2])), I=0, no=i)
 
     return G
@@ -47,8 +47,8 @@ def KirII(G):
         b.append(0)
         for i in range(len(cycle)):
             n1 = cycle[i]
-            n2 = cycle[(i+1) % len(cycle)]
-            data = G.get_edge_data(n1,n2)
+            n2 = cycle[(i + 1) % len(cycle)]
+            data = G.get_edge_data(n1, n2)
             Is[data['no']] = data['R'] if n1 > n2 else -data['R']
             b[-1] += data['sem'] if n1 > n2 else -data['sem']
         eq.append(Is)
@@ -64,7 +64,7 @@ def create_equations(G):
 
 
 G = import_from_file("small.csv")
-G.add_edge(1,4, R=0, sem=3, no=0)
+G.add_edge(1, 4, R=0, sem=3, no=0)
 I, E = create_equations(G)
 res = np.linalg.lstsq(I, E, rcond=None)[0]
 
@@ -75,5 +75,8 @@ for e in G.edges:
     print(G.get_edge_data(*e))
 
 pos = nx.spring_layout(G)
-nx.draw(G, pos)
+nx.draw(G, pos, edge_color=abs(res),
+        edge_cmap=plt.cm.Blues,
+        width= 4,
+        with_labels=True)
 plt.show()
