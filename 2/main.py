@@ -1,5 +1,7 @@
 import numpy as np
 import os
+import csv
+
 
 class Edge:
     def __init__(self, u, v):
@@ -13,7 +15,7 @@ class Node:
 
 
 class Graph:
-    def __init__(self, n):
+    def __init__(self, n=0):
         self.n = n
         self.G = [Node() for i in range(n)]
 
@@ -23,6 +25,15 @@ class Graph:
         e = Edge(a, w)
         self.G[b].edges.append(e)
 
+    def import_from_file(self, file):
+        with open(file, "r") as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                self.n += 1
 
-#    def import_from_file(file):
+
+
+g = Graph()
+g.import_from_file("soc-sign-bitcoinalpha.csv")
+
 
