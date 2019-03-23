@@ -2,6 +2,7 @@ import numpy as np
 import os
 import csv
 import networkx as nx
+import matplotlib.pyplot as plt
 
 
 def import_from_file(file):
@@ -65,5 +66,14 @@ def create_equations(G):
 G = import_from_file("small.csv")
 G.add_edge(1,4, R=0, sem=3, no=0)
 I, E = create_equations(G)
-res = np.linalg.lstsq(I, E)
-print(res)
+res = np.linalg.lstsq(I, E, rcond=None)[0]
+
+for i, e in enumerate(G.edges):
+    G[e[0]][e[1]]['I'] = res[i]
+
+for e in G.edges:
+    print(G.get_edge_data(*e))
+
+pos = nx.spring_layout(G)
+nx.draw(G, pos)
+plt.show()
