@@ -14,10 +14,8 @@ def import_from_file(file):
             records.append(row)
     G.add_nodes_from(list(map(lambda x: int(x[0]), records)))
     for i, record in enumerate(records):
-        print(record, i)
+        # print(record, i)
         G.add_edge(int(record[0]), int(record[1]), R=abs(int(record[2])), no=i + 1, sem=0)
-        # G.add_edge(int(record[1]), int(record[0]),  R=abs(int(record[2])), I=0, no=i)
-
     return G
 
 
@@ -42,7 +40,7 @@ def KirII(G):
     b = []
     edges_count = len(G.edges)
     for cycle in nx.cycle_basis(G):
-        print(cycle)
+        # print(cycle)
         Is = [0 for i in range(edges_count)]
         b.append(0)
         for i in range(len(cycle)):
@@ -68,15 +66,32 @@ G.add_edge(1, 4, R=0, sem=3, no=0)
 I, E = create_equations(G)
 res = np.linalg.lstsq(I, E, rcond=None)[0]
 
+print(res)
+
 for i, e in enumerate(G.edges):
-    G[e[0]][e[1]]['I'] = res[i]
+    G[e[0]][e[1]]['I'] = res[G[e[0]][e[1]]["no"]]
+    print("edge: ",e,"no: ",G[e[0]][e[1]]["no"],"I: ", G[e[0]][e[1]]['I'] )
 
-for e in G.edges:
-    print(G.get_edge_data(*e))
 
-pos = nx.spring_layout(G)
-nx.draw(G, pos, edge_color=abs(res),
-        edge_cmap=plt.cm.Blues,
-        width= 4,
-        with_labels=True)
+
+
+elarge = [(u, v) for (u, v, d) in G.edges(data=True) if d['I'] > 0.5]
+esmall = [(u, v) for (u, v, d) in G.edges(data=True) if d['I'] <= 0.5]
+
+
+pos = nx.spring_layout(G)  # positions for all nodes
+
+# nodes
+nx.draw_networkx_nodes(G, pos, node_size=700)
+
+# edges
+nx.draw_networkx_edges(G, pos, edgelist=elarge,
+                       width=6)
+nx.draw_networkx_edges(G, pos, edgelist=esmall,
+                       width=6, alpha=0.5, edge_color='b', style='dashed')
+
+# labels
+nx.draw_networkx_labels(G, pos, font_size=20, font_family='sans-serif')
+
+plt.axis('off')
 plt.show()
