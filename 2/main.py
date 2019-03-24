@@ -70,14 +70,10 @@ print(res)
 
 for i, e in enumerate(G.edges):
     G[e[0]][e[1]]['I'] = res[G[e[0]][e[1]]["no"]]
-    print("edge: ",e,"no: ",G[e[0]][e[1]]["no"],"I: ", G[e[0]][e[1]]['I'] )
+    print("edge: ", e, "no: ", G[e[0]][e[1]]["no"], "I: ", G[e[0]][e[1]]['I'])
 
-
-
-
-elarge = [(u, v) for (u, v, d) in G.edges(data=True) if d['I'] > 0.5]
-esmall = [(u, v) for (u, v, d) in G.edges(data=True) if d['I'] <= 0.5]
-
+elarge = [(u, v) for (u, v, d) in G.edges(data=True) if abs(d['I']) > 0.5]
+esmall = [(u, v) for (u, v, d) in G.edges(data=True) if abs(d['I']) <= 0.5]
 
 pos = nx.spring_layout(G)  # positions for all nodes
 
