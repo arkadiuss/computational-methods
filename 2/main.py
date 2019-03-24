@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import csv
+import mpl
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -90,21 +91,27 @@ for i, e in enumerate(G.edges):
 
 
 
+pos = nx.layout.spring_layout(digraph)
 
-pos = nx.spring_layout(digraph)  # positions for all nodes
+node_sizes = [3 + 10 * i for i in range(len(digraph))]
+M = digraph.number_of_edges()
+edge_colors = range(2, M + 2)
+edge_alphas = [(5 + i) / (M + 4) for i in range(M)]
 
-# nodes
-nx.draw_networkx_nodes(digraph, pos, node_size=700)
+nodes = nx.draw_networkx_nodes(digraph, pos, node_size=node_sizes, node_color='blue')
+edges = nx.draw_networkx_edges(digraph, pos, node_size=node_sizes, arrowstyle='->',
+                               arrowsize=10, edge_color=edge_colors,
+                               edge_cmap=plt.cm.Blues, width=2)
+# set alpha value for each edge
+for i in range(M):
+    edges[i].set_alpha(edge_alphas[i])
 
+pc = mpl.collections.PatchCollection(edges, cmap=plt.cm.Blues)
+pc.set_array(edge_colors)
+plt.colorbar(pc)
 
-nx.draw_networkx_edges(digraph, pos,width=3,arrowstyle='->', edge_color='b')
-
-
-# labels
-nx.draw_networkx_labels(digraph, pos, font_size=20, font_family='sans-serif')
-
-plt.axis('off')
+ax = plt.gca()
+ax.set_axis_off()
 plt.show()
-
 
 
