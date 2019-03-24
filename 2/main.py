@@ -28,9 +28,9 @@ def KirI(G):
         b.append(0)
         for e in G.edges(n):
             data = G.get_edge_data(*e)
-            print(e, data['no'])
+            #print(e, data['no'])
             Is[data['no']] = 1 if e[0] > e[1] else -1
-        print('\n\n')
+        #print('\n\n')
         eqs.append(Is)
     return eqs, b
 
@@ -66,28 +66,45 @@ G.add_edge(1, 4, R=0, sem=3, no=0)
 I, E = create_equations(G)
 res = np.linalg.lstsq(I, E, rcond=None)[0]
 
-print(res)
+#print(res)
+
 
 for i, e in enumerate(G.edges):
     G[e[0]][e[1]]['I'] = res[G[e[0]][e[1]]["no"]]
-    print("edge: ", e, "no: ", G[e[0]][e[1]]["no"], "I: ", G[e[0]][e[1]]['I'])
+    # print("edge: ", e, "no: ", G[e[0]][e[1]]["no"], "I: ", G[e[0]][e[1]]['I'])
 
-elarge = [(u, v) for (u, v, d) in G.edges(data=True) if abs(d['I']) > 0.5]
-esmall = [(u, v) for (u, v, d) in G.edges(data=True) if abs(d['I']) <= 0.5]
+digraph = nx.DiGraph()
+digraph.add_nodes_from(G)
 
-pos = nx.spring_layout(G)  # positions for all nodes
+max_I = -1
+
+for i, e in enumerate(G.edges):
+    #print(e, G[e[0]][e[1]]['I'])
+    if G[e[0]][e[1]]['I'] > 0:
+        digraph.add_edge(max(e[0],e[1]), min(e[0],e[1]), I=G[e[0]][e[1]]['I'])
+    else:
+        digraph.add_edge(min(e[0],e[1]), max(e[0],e[1]), I=abs(G[e[0]][e[1]]['I']))
+    if abs(G[e[0]][e[1]]['I']) > max_I:
+        max_I = abs(G[e[0]][e[1]]['I'])
+
+
+
+
+
+pos = nx.spring_layout(digraph)  # positions for all nodes
 
 # nodes
-nx.draw_networkx_nodes(G, pos, node_size=700)
+nx.draw_networkx_nodes(digraph, pos, node_size=700)
 
-# edges
-nx.draw_networkx_edges(G, pos, edgelist=elarge,
-                       width=6)
-nx.draw_networkx_edges(G, pos, edgelist=esmall,
-                       width=6, alpha=0.5, edge_color='b', style='dashed')
+
+nx.draw_networkx_edges(digraph, pos,width=3,arrowstyle='->', edge_color='b')
+
 
 # labels
-nx.draw_networkx_labels(G, pos, font_size=20, font_family='sans-serif')
+nx.draw_networkx_labels(digraph, pos, font_size=20, font_family='sans-serif')
 
 plt.axis('off')
 plt.show()
+
+
+
