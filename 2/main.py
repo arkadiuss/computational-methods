@@ -29,11 +29,27 @@ def KirI(G):
         b.append(0)
         for e in G.edges(n):
             data = G.get_edge_data(*e)
-            # print(e, data['no'])
+            #print(e, data['no'])
             Is[data['no']] = 1 if e[0] > e[1] else -1
-        # print('\n\n')
+        #print('\n\n')
         eqs.append(Is)
     return eqs, b
+
+
+def check_kir_I(G):
+    for n in G.nodes:
+        checker = 0
+        for e in G.edges(n):
+            data = G.get_edge_data(*e)
+            #print(e, data['no'])
+            #print(e, G[e[0]][e[1]]['I'])
+            if e[0] > e[1]:
+                checker -= G[e[0]][e[1]]['I']
+            else:
+                checker += G[e[0]][e[1]]['I']
+        if checker > 1e15:
+            return False
+    return True
 
 
 def KirII(G):
@@ -67,8 +83,7 @@ G.add_edge(1, 4, R=0, sem=3, no=0)
 I, E = create_equations(G)
 res = np.linalg.lstsq(I, E, rcond=None)[0]
 
-# print(res)
-
+#print(res)
 
 for i, e in enumerate(G.edges):
     G[e[0]][e[1]]['I'] = res[G[e[0]][e[1]]["no"]]
@@ -87,6 +102,13 @@ for i, e in enumerate(G.edges):
         digraph.add_edge(min(e[0], e[1]), max(e[0], e[1]), I=abs(G[e[0]][e[1]]['I']))
     if abs(G[e[0]][e[1]]['I']) > max_I:
         max_I = abs(G[e[0]][e[1]]['I'])
+
+if check_kir_I(G):
+    print("POPRAWNE")
+else:
+    print("COS NIE DZIALA")
+
+
 
 pos = nx.layout.spring_layout(digraph)
 
