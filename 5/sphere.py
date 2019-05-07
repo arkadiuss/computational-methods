@@ -47,6 +47,7 @@ def show_susv(u, s, v, B):
 
 B = create_eclipse()
 u, s, v = transform(B)
+s = np.diag(s)
 show_sv(v, B)
 show_ssv(s, v, B)
 show_susv(u, s, v, B)
