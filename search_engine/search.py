@@ -1,7 +1,10 @@
 import numpy as np
+from nltk import app
 from scipy import sparse
 from text_processor import bag_of_words, prepare_text, filter_words
 from common import read_file
+from flask import Flask, request
+app = Flask(__name__)
 
 
 def prepare_phrase(phrase, words):
@@ -35,8 +38,20 @@ print("Matrix loaded: " + str(search_matrix.shape))
 print("Loading articles...")
 articles = [a.split(',') for a in read_file('p_articles_{0}.txt'.format(size)).split('\n')]
 
-print("Type search phrase:")
-phrase = input()
-phrase_words = prepare_phrase(phrase, words)
-for i, c in match(phrase_words, search_matrix):
-    print(c, articles[i])
+
+def search(phrase):
+    phrase_words = prepare_phrase(phrase, words)
+    return [(i, c) for i, c in match(phrase_words, search_matrix)]
+
+
+@app.route("/", methods=['GET'])
+def get_searches():
+    phrase = request.args.get('phrase')
+    return search(phrase)
+
+
+# print("Type search phrase:")
+# phrase = input()
+# phrase_words = prepare_phrase(phrase, words)
+# for i, c in match(phrase_words, search_matrix):
+#     print(c, articles[i])
