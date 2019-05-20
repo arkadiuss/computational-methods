@@ -22,17 +22,18 @@ def match(phrase_words, search_matrix):
     return matches[:10]
 
 
+size=1000
 print("Loading words...")
-words = np.array(read_file('words.txt').split(','))
+words = np.array(read_file('words_{0}.txt'.format(size)).split(','))
 words.sort()
 print("Words loaded: " + str(words))
 
 print("Loading matrix...")
-search_matrix = sparse.load_npz('matrix.npz').toarray()
+search_matrix = sparse.load_npz('matrix_{0}.npz'.format(size)).toarray()
 print("Matrix loaded: " + str(search_matrix.shape))
 
 print("Loading articles...")
-articles = [a.split(',') for a in read_file('p_articles.txt').split('\n')]
+articles = [a.split(',') for a in read_file('p_articles_{0}.txt'.format(size)).split('\n')]
 
 print("Type search phrase:")
 phrase = input()
