@@ -1,5 +1,11 @@
 import csv
 import sys
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+nltk.download('stopwords')
+nltk.download('punkt')
 
 csv.field_size_limit(sys.maxsize)
 
@@ -35,6 +41,16 @@ def bag_of_words(article):
     return words
 
 
+def prepare_articles(articles):
+    for i in range(len(articles)):
+        # id = articles[i][0]
+        if i % 1000 == 0:
+            print("Tokenized {0} articles".format(i))
+        articles[i] = word_tokenize(articles[i][-1])
+        # f.write("{0}, {1}\n".format(id, articles[i]))
+    return articles
+
+
 def create_words_vector(articles):
     res = set()
     for k, i in enumerate(articles):
@@ -56,19 +72,28 @@ def write_to_file(file_name, content):
         f.write(content)
 
 
+def remove_stop_words(words):
+    stop_words = set(stopwords.words('english'))
+    return [w for w in words if w not in stop_words]
+
+
 print("Reading articles...")
-articles = read_articles()[:10000]
+articles = read_articles()[1:10000]
 
 print("Preparing...")
-for i in range(len(articles)):
-    #id = articles[i][0]
-    articles[i] = prepare_article(articles[i][-1])
-    #f.write("{0}, {1}\n".format(id, articles[i]))
-
+# articles = prepare_articles(articles)
+# articles_str = [",".join(a) for a in articles]
+# write_to_file('p_articles.txt', "\n".join(articles_str))
+print("Cached")
+articles = [a.split(',') for a in read_file('p_articles.txt').split('\n')]
 
 print("Creating word vector...")
-#words_vector = create_words_vector(articles)
-#write_to_file('words.txt', ",".join(words_vector))
+# words_vector = create_words_vector(articles)
+# write_to_file('words.txt', ",".join(words_vector))
 print("Cached")
 words_vector = set(read_file('words.txt').split(','))
-print(len(words_vector))
+print("There are {0} words".format(len(words_vector)))
+
+print("Removing stop words")
+words_vector = remove_stop_words(words_vector)
+print("There are {0} words after removing stop words".format(len(words_vector)))
