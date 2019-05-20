@@ -3,10 +3,11 @@ import sys
 import numpy as np
 import nltk
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 from scipy import sparse
 from scipy.sparse import linalg
+from text_processor import bag_of_words, prepare_text
+from common import read_file, write_to_file
 
 
 nltk.download('stopwords')
@@ -31,27 +32,12 @@ def read_articles():
     return articles
 
 
-def remove_characters(article):
-    return ''.join(c for c in article if c.isalpha() or c == ' ')
-
-
-def prepare_article(article):
-    return remove_characters(article).lower().split(' ')
-
-
-def bag_of_words(article):
-    words = {}
-    for i in article:
-        words[i] = words.get(i, 0) + 1
-    return words
-
-
 def prepare_articles(articles):
     for i in range(len(articles)):
         # id = articles[i][0]
         if i % 1000 == 0:
             print("Tokenized {0} articles".format(i))
-        articles[i] = word_tokenize(articles[i][-1])
+        articles[i] = prepare_text(articles[i][-1])
         # f.write("{0}, {1}\n".format(id, articles[i]))
     return articles
 
@@ -64,17 +50,6 @@ def create_words_vector(articles):
         bow = bag_of_words(i)
         res = res.union(bow.keys())
     return res
-
-
-def read_file(file_name):
-    with open(file_name, 'r') as f:
-        res = f.read()
-    return res
-
-
-def write_to_file(file_name, content):
-    with open(file_name, 'w') as f:
-        f.write(content)
 
 
 def stem_words(words):
