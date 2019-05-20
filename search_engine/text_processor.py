@@ -24,7 +24,7 @@ def prepare_text(text):
 
 def stem_words(words):
     stemmer = PorterStemmer()
-    return {stemmer.stem(w) for w in words}
+    return list(set([stemmer.stem(w) for w in words]))
 
 
 def remove_stop_words(words):
