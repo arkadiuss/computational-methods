@@ -38,26 +38,37 @@ def bag_of_words(article):
 def create_words_vector(articles):
     res = set()
     for k, i in enumerate(articles):
-        if k % 10000 == 0:
+        if k % 1000 == 0:
             print("Processed " + str(k) + " articles")
         bow = bag_of_words(i)
         res = res.union(bow.keys())
     return res
 
 
+def read_file(file_name):
+    with open(file_name, 'r') as f:
+        res = f.read()
+    return res
+
+
+def write_to_file(file_name, content):
+    with open(file_name, 'w') as f:
+        f.write(content)
+
+
 print("Reading articles...")
 articles = read_articles()[:10000]
 
 print("Preparing...")
-#TODO:  keep also id
-with open('p_articles.csv', 'w') as f:
-    for i in range(len(articles)):
-        id = articles[i][0]
-        articles[i] = prepare_article(articles[i][-1])
-        f.write("{0}, {1}\n".format(id, articles[i]))
+for i in range(len(articles)):
+    #id = articles[i][0]
+    articles[i] = prepare_article(articles[i][-1])
+    #f.write("{0}, {1}\n".format(id, articles[i]))
+
 
 print("Creating word vector...")
-words_vector = create_words_vector(articles)
+#words_vector = create_words_vector(articles)
+#write_to_file('words.txt', ",".join(words_vector))
+print("Cached")
+words_vector = set(read_file('words.txt').split(','))
 print(len(words_vector))
-with open('words.txt', 'w') as f:
-    f.write(repr(words_vector))
