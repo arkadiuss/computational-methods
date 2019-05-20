@@ -1,4 +1,6 @@
 from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
 
 
 def remove_characters_non_alpha(article):
@@ -18,3 +20,24 @@ def bag_of_words(text):
 
 def prepare_text(text):
     return word_tokenize(text)
+
+
+def stem_words(words):
+    stemmer = PorterStemmer()
+    return {stemmer.stem(w) for w in words}
+
+
+def remove_stop_words(words):
+    stop_words = set(stopwords.words('english'))
+    return [w for w in words if w not in stop_words]
+
+
+def remove_punctuation(words):
+    return [w for w in words if w.isalpha()]
+
+
+def filter_words(words_vector):
+    words_vector = remove_punctuation(words_vector)
+    words_vector = stem_words(words_vector)
+    words_vector = remove_stop_words(words_vector)
+    return words_vector
