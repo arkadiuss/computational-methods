@@ -4,6 +4,8 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
+from scipy import sparse
+
 
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -87,6 +89,15 @@ def remove_punctuation(words):
     return [w for w in words if w.isalpha()]
 
 
+def as_sprase_matrix(words, articles):
+    matrix = sparse.csr_matrix((len(words), len(articles)))
+    bow = bag_of_words(articles[0])
+    for i, w in enumerate(words):
+        if bow.get(w) is not None:
+            matrix[0][i] = bow[w]
+    print(matrix.count_nonzero())
+    return matrix
+
 print("Reading articles...")
 articles = read_articles()[1:10000]
 
@@ -115,3 +126,5 @@ print("There are {0} words after stemming".format(len(words_vector)))
 print("Removing stop words")
 words_vector = remove_stop_words(words_vector)
 print("There are {0} words after removing stop words".format(len(words_vector)))
+
+word_matrix = as_sprase_matrix(words_vector, articles)
