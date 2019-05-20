@@ -83,6 +83,10 @@ def remove_stop_words(words):
     return [w for w in words if w not in stop_words]
 
 
+def remove_punctuation(words):
+    return [w for w in words if w.isalpha()]
+
+
 print("Reading articles...")
 articles = read_articles()[1:10000]
 
@@ -99,6 +103,10 @@ print("Creating word vector...")
 print("Cached")
 words_vector = set(read_file('words.txt').split(','))
 print("There are {0} words".format(len(words_vector)))
+
+print("Removing punctuation")
+words_vector = remove_punctuation(words_vector)
+print("There are {0} words after removing punctuation".format(len(words_vector)))
 
 print("Stemming...")
 words_vector = stem_words(words_vector)
