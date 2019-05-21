@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Find me!</title>
+</head>
+<body>
+    <form action="/">
+        <input type="text" name="phrase"/>
+        <input type="submit" value="Search">
+    </form>
+    {% for a in articles %}
+    <div>
+        <h2>{{a.title}}</h2>
+        <p><i>Correlation: {{a.correlation}}</i></p>
+        <p>{{a.content}}</p>
+    </div>
+    {% endfor %}
+</body>
+</html>

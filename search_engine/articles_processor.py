@@ -1,33 +1,13 @@
-import csv
-import sys
 import numpy as np
 import nltk
 from scipy import sparse
 from scipy.sparse import linalg
 from text_processor import bag_of_words, prepare_text, filter_words, stem_words
-from common import read_file, write_to_file
+from common import read_file, write_to_file, read_articles
 
 
 nltk.download('stopwords')
 nltk.download('punkt')
-
-csv.field_size_limit(sys.maxsize)
-
-
-def read_csv_file(file):
-    records = []
-    with open(file, "r") as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            records.append(row)
-    return records
-
-
-def read_articles():
-    articles = []
-    for a in ['articles/articles1.csv']:
-        articles += read_csv_file(a)
-    return articles
 
 
 def prepare_articles(articles):
