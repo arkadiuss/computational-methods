@@ -82,7 +82,7 @@ Niestety dla 50000 oraz dla wszystkich artykułów stworzenie macierzy po dekomp
 
 \section{Wyniki}
 
-Aplikacja jest podzielona na dwie części - jedna odpowiadająca za indeksowanie i druga wyszukująca treści dla zadanej frazy. Obie częsci działają poprawnie. Poniżej znajduje się przykład:
+Aplikacja jest podzielona na dwie części - jedna odpowiadająca za indeksowanie - articles\_processor.py i druga wyszukująca treści dla zadanej frazy  - search.py. Obie częsci działają poprawnie. Poniżej znajduje się przykład:
 
 \image{weather_rain_south.png}{Wyniki wyszukiwania dla hasła "weather rain south"}
 
@@ -117,8 +117,7 @@ Dla k = 1000:
 Widzimy, że najlepsze wyniki otrzymaliśmy dla k w okoliczach 100-200. Bez SVD występowały szumu w postaci artykułów o dużej korelacji jednak bardzo krótkich i mało spokrewnionych z tematem. Powróciły one również dla k = 1000. Dla głównych artykułów korelacja nie zmieniała się znacząco jednak zmienia się ona dla szumu.
 
 \section{Wnioski}
-Algorytm LSI dobrze sprawdził się przy wyszukiwaniu frazy w podanym zbiorze tekstów. Zajmuje trochę czasu jego wcześniejsze przetworzenie i indeksacja ale nie są to bardzo duże czasy. Jednak myślę, że w tej wersji nie sprawdziłby się w silniku Googla. 
-Aby go polepszyć możnaby próbować zredukować wielkość wektora słów jeszcze bardziej ponieważ nadal po wypisaniu go widać szumy. Znaczący wpływ
-
-
+Algorytm LSI dobrze sprawdził się przy wyszukiwaniu frazy w podanym zbiorze tekstów. Zajmuje trochę czasu jego wcześniejsze przetworzenie i indeksacja, ale nie są to bardzo duże czasy. Jednak myślę, że w tej wersji nie sprawdziłby się w silniku Googla. \\
+Aby go polepszyć możnaby próbować zredukować wielkość wektora słów jeszcze bardziej ponieważ nadal po wypisaniu go widać szumy. Znaczący wpływ ma również SVD, które zostało przeze mnie pominięte dla większej ilości artykułów z powodów ograniczeń technicznych.\\
+Ciekawą częścią algorytmu jest to, że każdy jego element można zapisać w cache'u - komentarze w pliku articles\_processor.py - co znacząco przyśpiesza pracę. 
 \end{document}
