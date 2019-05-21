@@ -1,7 +1,9 @@
 import numpy as np
 from text_processor import bag_of_words, prepare_text, filter_words
 from common import read_file, read_articles
+from scipy import sparse
 from flask import Flask, request, render_template
+from scipy.sparse import linalg
 
 app = Flask(__name__)
 
@@ -13,25 +15,28 @@ def prepare_phrase(phrase, words):
 
 
 def correlation(phrase_words, article_words):
-    return phrase_words.T @ article_words / (np.linalg.norm(phrase_words) * np.linalg.norm(article_words))
+    return phrase_words.T @ article_words / (np.linalg.norm(phrase_words) * linalg.norm(article_words))
 
 
 def match(phrase_words, search_matrix):
     matches = []
     for i, a_w in enumerate(search_matrix):
-        matches.append((i, correlation(phrase_words, a_w)))
+        if i % 1000 == 0:
+            print("Searched in {0} articles".format(i))
+        matches.append((i, correlation(phrase_words, a_w.T)[0]))
     matches.sort(key=lambda x: x[1], reverse = True)
     return matches[:10]
 
 
-size=10000
+size=142572
+# size = 1000
 print("Loading words...")
 words = np.array(read_file('words_{0}.txt'.format(size)).split(','))
 words.sort()
-print("Words loaded: " + str(words))
+print("Words loaded: " + str(len(words)))
 
 print("Loading matrix...")
-search_matrix = np.load('matrix_{0}_denoised.npy'.format(size))
+search_matrix = sparse.load_npz('matrix_{0}_idfed.npz'.format(size))
 print("Matrix loaded: " + str(search_matrix.shape))
 
 print("Loading articles...")

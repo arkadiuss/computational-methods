@@ -76,15 +76,16 @@ def idf(words_matrix):
 def denoise(word_matrix, denoise_coeff = 100):
     u, s, vt = linalg.svds(word_matrix, denoise_coeff)
     print("SVD counted")
-    compressed_matrix = sparse.csr_matrix(u) @ sparse.diags([s],[0]) @ sparse.csr_matrix(vt)
+    compressed_matrix = sparse.csr_matrix(u @ np.diag(s)) @ vt
     print("Matrix sparsed")
-    return compressed_matrix
+    return sparse.csr_matrix(compressed_matrix)
 
 
 print(datetime.datetime.now())
 print("Reading articles")
-articles = read_articles()[1:]
-size = len(articles)
+# articles = read_articles()[1:]
+size = 10000
+articles = read_articles()[1:size+1]
 name = 'matrix_'+str(size)
 print("There are {0} articles".format(size))
 

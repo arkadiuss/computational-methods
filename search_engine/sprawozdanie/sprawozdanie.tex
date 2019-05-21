@@ -19,7 +19,7 @@ Zadanie polegało na zastosowaniu metody Latent Semantic Indexing (LSI), aby w z
 Zbiór danych jaki zastosowałem pochodzi ze strony \url{https://www.kaggle.com/snapcrack/all-the-news}. Jest to zbiór artykułów z amerykańskich gazet z lat 2016-2017 o różnej tematyce. Jest złożony z ponad 140 tys. tekstów.
 
 \section{Zastosowane przekształcenia}
-Na początku przetwarzamy wstępnie zbiór artykułów aby później móc skuteczniej w nim wyszukiwać:
+Na początku przetwarzamy wstępnie przetwarzamy zbiór artykułów, aby później móc skuteczniej w nim wyszukiwać:
 \subsection{Zbiór użytych słów}
 Dla każdego artykułu bierzemy wszyskie użyte słowa i tworzymy wektor słów dla wszystkich tekstów. Dla kolejnych podzbiorów artykułów posiada on następujące wielkości.
 \begin{center}
@@ -38,9 +38,9 @@ W połączeniu z poprzednim krokiem pozwala to znacząco zredukowac rozmiar wekt
 \begin{center}
 	\begin{tabular}{c|c}
 	liczba artykułów & rozmiar wektora \\ \hline
-	1000 &  \\ \hline
+	1000 &  ~24 tys.\\ \hline
 	10000 & ~70 tys.\\ \hline
-	wszystkie(142572) & ~ tys.\\
+	wszystkie(142572) & ~234tys.\\
 	\end{tabular}
 \end{center}
 \subsection{Stopwords}
@@ -52,6 +52,9 @@ Aby przyśpieszyć obliczenia (i w ogóle je umożliwić) stosujemy więc przech
 W celu zwiększenia jakości wyszukiwania stosujemy Inverse Document Frequency (IDF). Pozwala on nam zmniejszyć znaczenie słów, które występują w wielu artykułach i zwiększyć tych, które rzadko.
 \subsection{Odszumianie}
 W celu redukcji szumów stosujemy algorytm SVD i wybieramy k najciekawszych wartości własnych. Co ciekawe zwiększa to liczbę niezerowych elementów macierzy z ok 1-2 mln do 87 mln dla 10 tys. artykułów.
+
+\section{Obliczenia}
+
 \section{Wnioski}
 
 \end{document}
