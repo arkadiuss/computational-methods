@@ -1,0 +1,57 @@
+\documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\title{Sprawozdanie - Latent Semantic Indexing}
+\author{Arkadiusz Kraus}
+
+\maketitle
+
+
+\section{Zadanie}
+Zadanie polegało na zastosowaniu metody Latent Semantic Indexing (LSI), aby w zbiorze tektów móc wyszukiwać te związane z podaną frazą.
+
+\section{Zbiór danych}
+Zbiór danych jaki zastosowałem pochodzi ze strony \url{https://www.kaggle.com/snapcrack/all-the-news}. Jest to zbiór artykułów z amerykańskich gazet z lat 2016-2017 o różnej tematyce. Jest złożony z ponad 140 tys. tekstów.
+
+\section{Zastosowane przekształcenia}
+Na początku przetwarzamy wstępnie zbiór artykułów aby później móc skuteczniej w nim wyszukiwać:
+\subsection{Zbiór użytych słów}
+Dla każdego artykułu bierzemy wszyskie użyte słowa i tworzymy wektor słów dla wszystkich tekstów. Dla kolejnych podzbiorów artykułów posiada on następujące wielkości.
+\begin{center}
+	\begin{tabular}{c|c}
+	liczba artykułów & rozmiar wektora \\ \hline
+	1000 &  \\ \hline
+	10000 & ~140 tys.\\ \hline
+	wszystkie(142572) & ~400 tys.\\
+	\end{tabular}
+\end{center}
+\subsection{Wstępne przetworzenie}
+Liczba słów uzyskana w poprzednim podpunkcie jest bardzo duża, aby uczynić algorytm wydajniejszym staramy się zredukować ten wektor. We wstępnym przetworzeniu pomijamy wielkość liter oraz znaki interpunkcyjne.
+\subsection{Stemming}
+Wiele słów może występować w różnych formach np. take i taking. Nas jednak interesuje sam fakt czynności, a nie koniecznie np. czas w jakim była wykonywana. Innym przypadkiem jest też liczba mnoga rzeczownika, gdzie nadal interesuje nas sam rzeczownik. Dlatego stosujemy algorytm stemmingu (dokładniej Porter Stemmer), doprowadzamy słowa do wspólnego rdzenia i usuwamy duplikaty. 
+W połączeniu z poprzednim krokiem pozwala to znacząco zredukowac rozmiar wektora:
+\begin{center}
+	\begin{tabular}{c|c}
+	liczba artykułów & rozmiar wektora \\ \hline
+	1000 &  \\ \hline
+	10000 & ~70 tys.\\ \hline
+	wszystkie(142572) & ~ tys.\\
+	\end{tabular}
+\end{center}
+\subsection{Stopwords}
+Stopwords to zbiór słów takich jak przyimki itp, które występują bardzo często we wszelkich tekstach. Nie mają one większego znaczenia dla treści dlatego również można je pominąć. Nie redukuje to wielkości wektora znacznie (o około 150 słów), jednak zwiększa jakość wyszukiwania.
+\subsection{Tworzenie macierzy rzadkiej}
+Chcemy teraz utworzyć macierz, która jako wiersze będzie przyjmować kolejne artukułu, a jako kolumny kolejne słowa ze zbioru. Wartością w komórce $a_ij$ macierzy będzie liczba wystąpień j-tego słowa w i-tym artykule. Zauważmy, że będzie to macierz rzadka ponieważ artyukuły mają ok. 4000 tys słów, a wektor słów jest znacznie większy. Dodatkowo jeśli artykuł jest na jakis temat to słowa często się w nim powtarzają.
+Aby przyśpieszyć obliczenia (i w ogóle je umożliwić) stosujemy więc przechowywanie w postaci macierzy rzadkiej (dokładniej CSR - Compressed Sparse Row).
+\subsection{IDF}
+W celu zwiększenia jakości wyszukiwania stosujemy Inverse Document Frequency (IDF). Pozwala on nam zmniejszyć znaczenie słów, które występują w wielu artykułach i zwiększyć tych, które rzadko.
+\subsection{Odszumianie}
+W celu redukcji szumów stosujemy algorytm SVD i wybieramy k najciekawszych wartości własnych. Co ciekawe zwiększa to liczbę niezerowych elementów macierzy z ok 1-2 mln do 87 mln dla 10 tys. artykułów.
+\section{Wnioski}
+
+\end{document}
