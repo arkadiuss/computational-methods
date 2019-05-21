@@ -3,6 +3,7 @@ import sys
 
 csv.field_size_limit(sys.maxsize)
 
+
 def read_csv_file(file):
     records = []
     with open(file, "r") as csvfile:
@@ -14,7 +15,7 @@ def read_csv_file(file):
 
 def read_articles():
     articles = []
-    for a in ['articles/articles1.csv']:
+    for a in ['articles/articles1.csv', 'articles/articles2.csv', 'articles/articles3.csv']:
         articles += read_csv_file(a)
     return articles
 
