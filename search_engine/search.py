@@ -24,21 +24,23 @@ def match(phrase_words, search_matrix):
     for i, a_w in enumerate(search_matrix):
         if i % 1000 == 0:
             print("Searched in {0} articles".format(i))
-        matches.append((i, correlation(pw, a_w.T)[0]))
+        # matches.append((i, correlation(pw, a_w.T)[0]))
+        matches.append((i, correlation(pw, a_w)))
     matches.sort(key=lambda x: x[1], reverse = True)
     return matches[:10]
 
 
 # size=142572
 # size = 1000
-size = 50000
+size = 10000
 print("Loading words...")
 words = np.array(read_file('words_{0}.txt'.format(size)).split(','))
 words.sort()
 print("Words loaded: " + str(len(words)))
 
 print("Loading matrix...")
-search_matrix = sparse.load_npz('matrix_{0}_normalized.npz'.format(size))
+# search_matrix = sparse.load_npz('matrix_{0}_normalized.npz'.format(size))
+search_matrix = np.load('matrix_{0}_denoised.npy'.format(size))
 print("Matrix loaded: " + str(search_matrix.shape))
 
 print("Loading articles...")
