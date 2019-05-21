@@ -89,7 +89,7 @@ def denoise(word_matrix, denoise_coeff = 100):
 print(datetime.datetime.now())
 print("Reading articles")
 # articles = read_articles()[1:]
-size = 50000
+size = 10000
 articles = read_articles()[1:size+1]
 name = 'matrix_'+str(size)
 print("There are {0} articles".format(size))

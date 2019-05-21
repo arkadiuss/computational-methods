@@ -3,6 +3,14 @@
 \usepackage{hyperref}
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+
+\newcommand{\image}[2]{\begin{figure}[H]
+	\centering	
+	\includegraphics[width=\textwidth]{../images/#1}
+	\caption{#2}
+\end{figure}}
 
 \begin{document}
 
@@ -25,7 +33,7 @@ Dla każdego artykułu bierzemy wszyskie użyte słowa i tworzymy wektor słów 
 \begin{center}
 	\begin{tabular}{c|c}
 	liczba artykułów & rozmiar wektora \\ \hline
-	1000 &  \\ \hline
+	1000 &  ~44 tys. \\ \hline
 	10000 & ~140 tys.\\ \hline
 	50000 & ~230 tys.\\ \hline
 	wszystkie(142572) & ~400 tys.\\
@@ -41,7 +49,7 @@ W połączeniu z poprzednim krokiem pozwala to znacząco zredukowac rozmiar wekt
 	liczba artykułów & rozmiar wektora \\ \hline
 	1000 &  ~24 tys.\\ \hline
 	10000 & ~70 tys.\\ \hline
-	50000 & ~127 tys.
+	50000 & ~127 tys. \\ \hline
 	wszystkie(142572) & ~234tys.\\
 	\end{tabular}
 \end{center}
@@ -63,10 +71,10 @@ Problem ten jest bardzo wymagający obliczeniowo oraz pamięciowo. Przechowanie 
 \begin{center}
 	\begin{tabular}{c|c|p{1.5cm}|p{1.6cm}|c}
 	\centering liczba artykułów & rozmiar wektora & rozmiar wektora po przetworzeniu & czas przetworzenia & czas wyszukania \\ \hline
-	1000 &  & ~24 tys & natychmiast & natychmiast\\ \hline
-	10000 & ~140 tys & ~70 tys & ~1 min & 3 s\\ \hline
-	50000 & ~230 tys & 127 tys & 35 min & \\ \hline
-	wszystkie(142572) & ~400 tys & ~234 tys & 2,5h & 10 min\\
+	1000 & ~44 tys & ~24 tys & natychmiast & natychmiast\\ \hline
+	10000 & ~140 tys & ~70 tys & ~1 min & 1 s\\ \hline
+	50000 & ~230 tys & 127 tys & 35 min & 15 sek\\ \hline
+	wszystkie(142572) & ~400 tys & ~234 tys & 2,5h & 1 min\\
 	\end{tabular}
 \end{center}
 
@@ -74,7 +82,43 @@ Niestety dla 50000 oraz dla wszystkich artykułów stworzenie macierzy po dekomp
 
 \section{Wyniki}
 
+Aplikacja jest podzielona na dwie części - jedna odpowiadająca za indeksowanie i druga wyszukująca treści dla zadanej frazy. Obie częsci działają poprawnie. Poniżej znajduje się przykład:
+
+\image{weather_rain_south.png}{Wyniki wyszukiwania dla hasła "weather rain south"}
+
+\image{weather_rain_south_2.png}{Wyniki wyszukiwania dla hasła "weather rain south" część druga}
+
+Dla większej ilości artukułów gdzie nie było możliwe przeprowadzenie SVD zdarzają się jednak wyniki takie jak np. ten:
+
+\image{baseball_fan_with_noise.png}{Przykład wyniku z szumami}
+
+W tym przypadku dopiero któryś wynik jest taki jak powinien, a na początku jest szum. To samo zapytanie przy mniejszej ilości artykułów i z usuniętym szumem wygląda następująco:
+
+\image{baseball_fan_without_noise.png}{Przykład wyniku bez szumu}
+
+Przeanalizujmy jeszcze wyniki dla różnych współczynników k przy SVD:
+
+Bez SVD:
+\image{trumps_wife_no_svd.png}{Wynik dla zapytania "Trump's wife" bez svd}
+
+Dla k = 50:
+\image{trumps_wife_50.png}{Wynik dla zapytania "Trump's wife" i k = 50}
+\image{trumps_wife_50_2.png}{Wynik dla zapytania "Trump's wife" i k = 50 część druga}
+
+Dla k = 100:
+\image{trumps_wife_100.png}{Wynik dla zapytania "Trump's wife" i k = 100}
+
+Dla k = 200:
+\image{trumps_wife_200.png}{Wynik dla zapytania "Trump's wife" i k = 200}
+
+Dla k = 1000:
+\image{trumps_wife_1000.png}{Wynik dla zapytania "Trump's wife" i k = 1000}
+
+Widzimy, że najlepsze wyniki otrzymaliśmy dla k w okoliczach 100-200. Bez SVD występowały szumu w postaci artykułów o dużej korelacji jednak bardzo krótkich i mało spokrewnionych z tematem. Powróciły one również dla k = 1000. Dla głównych artykułów korelacja nie zmieniała się znacząco jednak zmienia się ona dla szumu.
 
 \section{Wnioski}
+Algorytm LSI dobrze sprawdził się przy wyszukiwaniu frazy w podanym zbiorze tekstów. Zajmuje trochę czasu jego wcześniejsze przetworzenie i indeksacja ale nie są to bardzo duże czasy. Jednak myślę, że w tej wersji nie sprawdziłby się w silniku Googla. 
+Aby go polepszyć możnaby próbować zredukować wielkość wektora słów jeszcze bardziej ponieważ nadal po wypisaniu go widać szumy. Znaczący wpływ
+
 
 \end{document}
