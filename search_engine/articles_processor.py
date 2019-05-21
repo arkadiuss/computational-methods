@@ -6,7 +6,7 @@ from scipy import sparse
 from scipy.sparse import linalg
 from text_processor import bag_of_words, prepare_text, filter_words, stem_words
 from common import read_file, write_to_file, read_articles
-
+from collections import Counter
 
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -65,16 +65,18 @@ def as_sprase_matrix(words, articles):
 
 
 def idf(words_matrix):
-    matrix = words_matrix.toarray()
-    N = matrix.shape[0]
-    dtf = np.log(N*np.array([1/len(np.where(matrix[:, i] > 0)[0]) for i in range(matrix.shape[1])]))
+    N = words_matrix.shape[0]
+    c = Counter(words_matrix.nonzero()[1])
+    print(datetime.datetime.now())
+    print("Counter finished")
+    dtf = np.log(N*np.array([1/c[i] for i in range(words_matrix.shape[1])]))
     return sparse.csr_matrix(words_matrix) @ sparse.diags([dtf], [0])
 
 
 def denoise(word_matrix, denoise_coeff = 100):
     u, s, vt = linalg.svds(word_matrix, denoise_coeff)
     print("SVD counted")
-    compressed_matrix = u @ np.diag(s) @ vt
+    compressed_matrix = sparse.csr_matrix(u) @ sparse.diags([s],[0]) @ sparse.csr_matrix(vt)
     print("Matrix sparsed")
     return compressed_matrix
 
@@ -88,34 +90,34 @@ print("There are {0} articles".format(size))
 
 print(datetime.datetime.now())
 print("Preparing")
-articles = prepare_articles(articles)
-articles_str = [",".join(a) for a in articles]
-write_to_file('p_articles_{0}.txt'.format(size), "\n".join(articles_str))
-# print("Cached")
-# articles = [a.split(',') for a in read_file('p_articles_{0}.txt'.format(size)).split('\n')]
+# articles = prepare_articles(articles)
+# articles_str = [",".join(a) for a in articles]
+# write_to_file('p_articles_{0}.txt'.format(size), "\n".join(articles_str))
+print("Cached")
+articles = [a.split(',') for a in read_file('p_articles_{0}.txt'.format(size)).split('\n')]
 
 print(datetime.datetime.now())
 print("Processing words to vector")
-words_vector = extract_and_process_words(articles)
-write_to_file('words_{0}.txt'.format(size), ",".join(words_vector))
-# print("Cached")
-# words_vector = read_file('words_{0}.txt'.format(size)).split(',')
+# words_vector = extract_and_process_words(articles)
+# write_to_file('words_{0}.txt'.format(size), ",".join(words_vector))
+print("Cached")
+words_vector = read_file('words_{0}.txt'.format(size)).split(',')
 
 print(datetime.datetime.now())
 print("Creating sparse matrix")
-word_matrix = as_sprase_matrix(words_vector, articles)
-sparse.save_npz('{0}.npz'.format(name), word_matrix)
-# print("Cached")
-# word_matrix = sparse.load_npz('{0}.npz'.format(name))
+# word_matrix = as_sprase_matrix(words_vector, articles)
+# sparse.save_npz('{0}.npz'.format(name), word_matrix)
+print("Cached")
+word_matrix = sparse.load_npz('{0}.npz'.format(name))
 
 print(datetime.datetime.now())
 print("IDF")
-word_matrix = idf(word_matrix)
-sparse.save_npz('{0}_idfed.npz'.format(name), word_matrix)
-# print("Cached")
-# word_matrix = sparse.load_npz('{0}_idfed.npz'.format(name))
+# word_matrix = idf(word_matrix)
+# sparse.save_npz('{0}_idfed.npz'.format(name), word_matrix)
+print("Cached")
+word_matrix = sparse.load_npz('{0}_idfed.npz'.format(name))
 
 print(datetime.datetime.now())
 print("SVD")
 compressed_matrix_sparse = denoise(word_matrix, denoise_coeff=200)
-np.save('{0}_denoised.npy'.format(name), compressed_matrix_sparse)
+sparse.save_npz('{0}_denoised.npz'.format(name), compressed_matrix_sparse)
