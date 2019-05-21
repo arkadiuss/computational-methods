@@ -1,3 +1,173 @@
+###################### 50000 ###############################
+2019-05-21 10:44:18.625175
+Reading articles
+There are 50000 articles
+2019-05-21 10:44:30.037464
+Preparing
+Tokenized 0 articles
+Tokenized 1000 articles
+Tokenized 2000 articles
+Tokenized 3000 articles
+Tokenized 4000 articles
+Tokenized 5000 articles
+Tokenized 6000 articles
+Tokenized 7000 articles
+Tokenized 8000 articles
+Tokenized 9000 articles
+Tokenized 10000 articles
+Tokenized 11000 articles
+Tokenized 12000 articles
+Tokenized 13000 articles
+Tokenized 14000 articles
+Tokenized 15000 articles
+Tokenized 16000 articles
+Tokenized 17000 articles
+Tokenized 18000 articles
+Tokenized 19000 articles
+Tokenized 20000 articles
+Tokenized 21000 articles
+Tokenized 22000 articles
+Tokenized 23000 articles
+Tokenized 24000 articles
+Tokenized 25000 articles
+Tokenized 26000 articles
+Tokenized 27000 articles
+Tokenized 28000 articles
+Tokenized 29000 articles
+Tokenized 30000 articles
+Tokenized 31000 articles
+Tokenized 32000 articles
+Tokenized 33000 articles
+Tokenized 34000 articles
+Tokenized 35000 articles
+Tokenized 36000 articles
+Tokenized 37000 articles
+Tokenized 38000 articles
+Tokenized 39000 articles
+Tokenized 40000 articles
+Tokenized 41000 articles
+Tokenized 42000 articles
+Tokenized 43000 articles
+Tokenized 44000 articles
+Tokenized 45000 articles
+Tokenized 46000 articles
+Tokenized 47000 articles
+Tokenized 48000 articles
+Tokenized 49000 articles
+2019-05-21 10:51:40.252100
+Processing words to vector
+Creating word vector...
+Processed 0 articles
+Processed 1000 articles
+Processed 2000 articles
+Processed 3000 articles
+Processed 4000 articles
+Processed 5000 articles
+Processed 6000 articles
+Processed 7000 articles
+Processed 8000 articles
+Processed 9000 articles
+Processed 10000 articles
+Processed 11000 articles
+Processed 12000 articles
+Processed 13000 articles
+Processed 14000 articles
+Processed 15000 articles
+Processed 16000 articles
+Processed 17000 articles
+Processed 18000 articles
+Processed 19000 articles
+Processed 20000 articles
+Processed 21000 articles
+Processed 22000 articles
+Processed 23000 articles
+Processed 24000 articles
+Processed 25000 articles
+Processed 26000 articles
+Processed 27000 articles
+Processed 28000 articles
+Processed 29000 articles
+Processed 30000 articles
+Processed 31000 articles
+Processed 32000 articles
+Processed 33000 articles
+Processed 34000 articles
+Processed 35000 articles
+Processed 36000 articles
+Processed 37000 articles
+Processed 38000 articles
+Processed 39000 articles
+Processed 40000 articles
+Processed 41000 articles
+Processed 42000 articles
+Processed 43000 articles
+Processed 44000 articles
+Processed 45000 articles
+Processed 46000 articles
+Processed 47000 articles
+Processed 48000 articles
+Processed 49000 articles
+There are 227651 words
+2019-05-21 11:05:50.804264
+Creating sparse matrix
+0 articles added to matrix
+1000 articles added to matrix
+2000 articles added to matrix
+3000 articles added to matrix
+4000 articles added to matrix
+5000 articles added to matrix
+6000 articles added to matrix
+7000 articles added to matrix
+8000 articles added to matrix
+9000 articles added to matrix
+10000 articles added to matrix
+11000 articles added to matrix
+12000 articles added to matrix
+13000 articles added to matrix
+14000 articles added to matrix
+15000 articles added to matrix
+16000 articles added to matrix
+17000 articles added to matrix
+18000 articles added to matrix
+19000 articles added to matrix
+20000 articles added to matrix
+21000 articles added to matrix
+22000 articles added to matrix
+23000 articles added to matrix
+24000 articles added to matrix
+25000 articles added to matrix
+26000 articles added to matrix
+27000 articles added to matrix
+28000 articles added to matrix
+29000 articles added to matrix
+30000 articles added to matrix
+31000 articles added to matrix
+32000 articles added to matrix
+33000 articles added to matrix
+34000 articles added to matrix
+35000 articles added to matrix
+36000 articles added to matrix
+37000 articles added to matrix
+38000 articles added to matrix
+39000 articles added to matrix
+40000 articles added to matrix
+41000 articles added to matrix
+42000 articles added to matrix
+43000 articles added to matrix
+44000 articles added to matrix
+45000 articles added to matrix
+46000 articles added to matrix
+47000 articles added to matrix
+48000 articles added to matrix
+49000 articles added to matrix
+All added
+Sparse matrix created
+2019-05-21 11:19:00.722712
+IDF
+2019-05-21 11:19:03.225007
+Counter finished
+2019-05-21 11:19:10.924452
+###################### 100000 ##############################
 2019-05-21 02:07:05.106949
 Reading articles
 [nltk_data]   Package punkt is already up-to-date!

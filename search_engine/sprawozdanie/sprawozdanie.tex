@@ -27,6 +27,7 @@ Dla każdego artykułu bierzemy wszyskie użyte słowa i tworzymy wektor słów 
 	liczba artykułów & rozmiar wektora \\ \hline
 	1000 &  \\ \hline
 	10000 & ~140 tys.\\ \hline
+	50000 & ~230 tys.\\ \hline
 	wszystkie(142572) & ~400 tys.\\
 	\end{tabular}
 \end{center}
@@ -40,6 +41,7 @@ W połączeniu z poprzednim krokiem pozwala to znacząco zredukowac rozmiar wekt
 	liczba artykułów & rozmiar wektora \\ \hline
 	1000 &  ~24 tys.\\ \hline
 	10000 & ~70 tys.\\ \hline
+	50000 & ~127 tys.
 	wszystkie(142572) & ~234tys.\\
 	\end{tabular}
 \end{center}
@@ -50,10 +52,28 @@ Chcemy teraz utworzyć macierz, która jako wiersze będzie przyjmować kolejne 
 Aby przyśpieszyć obliczenia (i w ogóle je umożliwić) stosujemy więc przechowywanie w postaci macierzy rzadkiej (dokładniej CSR - Compressed Sparse Row).
 \subsection{IDF}
 W celu zwiększenia jakości wyszukiwania stosujemy Inverse Document Frequency (IDF). Pozwala on nam zmniejszyć znaczenie słów, które występują w wielu artykułach i zwiększyć tych, które rzadko.
+\subsection{Normalizacja}
+Normalizacja pozwala uniezależnić korelację od długości tekstu. Wykonujemy ją od razu, aby potem przyspieszyć wyszukiwanie, aby nie trzeba było obliczać normy za każdym razem.
 \subsection{Odszumianie}
 W celu redukcji szumów stosujemy algorytm SVD i wybieramy k najciekawszych wartości własnych. Co ciekawe zwiększa to liczbę niezerowych elementów macierzy z ok 1-2 mln do 87 mln dla 10 tys. artykułów.
 
 \section{Obliczenia}
+Problem ten jest bardzo wymagający obliczeniowo oraz pamięciowo. Przechowanie macierzy wielkości \textit{liczba artykułów * liczba słów} dla większej ilości artukułów skutkuje skończeniem pamięci. W pliku \textit{logs} znajdują się czasy wstępnego przetworzenia dla 50000 i wszystkich artykułów. Wyszukiwanie po przetworzeniu i odczytaniu wcześniejszej macierzy jest również zależne od ilości artykułów i dla większej ilości jeszcze trochę mu brakuje względem czasów osiągnych przez Google.
+
+\begin{center}
+	\begin{tabular}{c|c|p{1.5cm}|p{1.6cm}|c}
+	\centering liczba artykułów & rozmiar wektora & rozmiar wektora po przetworzeniu & czas przetworzenia & czas wyszukania \\ \hline
+	1000 &  & ~24 tys & natychmiast & natychmiast\\ \hline
+	10000 & ~140 tys & ~70 tys & ~1 min & 3 s\\ \hline
+	50000 & ~230 tys & 127 tys & 35 min & \\ \hline
+	wszystkie(142572) & ~400 tys & ~234 tys & 2,5h & 10 min\\
+	\end{tabular}
+\end{center}
+
+Niestety dla 50000 oraz dla wszystkich artykułów stworzenie macierzy po dekompozycji SVD okazało się zbyt czasochłonne. Przy próbie utworzenia normalnej macierzy po dekompozycji dla np. 200 wartości własnych otrzymywałem brak pamięci, natomiast dla macierzy rzadkich obliczenia trwały w nieskończoność (obliczenia na nich są czasochłonnymi operacjami). Dlatego dla tych wielkości wyszukiwarka używa macierzy bez odszumienia.
+
+\section{Wyniki}
+
 
 \section{Wnioski}
 

@@ -73,18 +73,23 @@ def idf(words_matrix):
     return sparse.csr_matrix(words_matrix) @ sparse.diags([dtf], [0])
 
 
+def normalize(words_matrix):
+    norm = np.array([1 / (linalg.norm(wr.T)) for wr in words_matrix])
+    return sparse.diags([norm], [0]) @ sparse.csr_matrix(words_matrix)
+
+
 def denoise(word_matrix, denoise_coeff = 100):
     u, s, vt = linalg.svds(word_matrix, denoise_coeff)
     print("SVD counted")
-    compressed_matrix = sparse.csr_matrix(u @ np.diag(s)) @ vt
+    compressed_matrix = u @ np.diag(s) @ vt
     print("Matrix sparsed")
-    return sparse.csr_matrix(compressed_matrix)
+    return compressed_matrix
 
 
 print(datetime.datetime.now())
 print("Reading articles")
 # articles = read_articles()[1:]
-size = 10000
+size = 50000
 articles = read_articles()[1:size+1]
 name = 'matrix_'+str(size)
 print("There are {0} articles".format(size))
@@ -119,6 +124,14 @@ print("Cached")
 word_matrix = sparse.load_npz('{0}_idfed.npz'.format(name))
 
 print(datetime.datetime.now())
+print("Normalization")
+word_matrix = normalize(word_matrix)
+sparse.save_npz('{0}_normalized.npz'.format(name), word_matrix)
+# print("Cached")
+# word_matrix = sparse.load_npz('{0}_normalized.npz'.format(name))
+
+print(datetime.datetime.now())
 print("SVD")
 compressed_matrix_sparse = denoise(word_matrix, denoise_coeff=200)
-sparse.save_npz('{0}_denoised.npz'.format(name), compressed_matrix_sparse)
+np.save('{0}_denoised.npy'.format(name), compressed_matrix_sparse)
+# sparse.save_npz('{0}_denoised.npz'.format(name), compressed_matrix_sparse)
