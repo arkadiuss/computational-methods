@@ -1,0 +1,3 @@
+[submodule "search_engine"]
+	path = search_engine
+	url = https://github.com/arkadiuss/search_engine
